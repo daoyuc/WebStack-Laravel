@@ -2,16 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Category;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        return view('index', [
-            'categories' => Category::with('children', 'sites')->orderBy('order')->get(),
-        ]);
+        $theme = config('common.theme');
+        if ($theme == 'default') {
+            return view('index', [
+                'categories' => Category::with('children', 'sites')->orderBy('order')->get(),
+            ]);
+        } else  {
+            return view($theme . '.index', [
+                'categories' => Category::with('children', 'sites')->orderBy('order')->get(),
+            ]);
+        }
     }
 
     public function about()
