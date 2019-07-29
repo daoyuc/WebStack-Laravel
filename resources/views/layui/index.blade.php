@@ -93,7 +93,7 @@
                                 {{$site->title}}
                             </td>
                             <td>
-                                <img alt="{{$site->title}}" class="img-circle" src="/uploads/{{$site->thumb}}" width="40"/>
+                                <img alt="{{$site->title}}" lay-src="/uploads/{{$site->thumb}}" width="40" />
                             </td>
                             <td>
                                 <a href="javascript:void(0);" onclick="window.open('{{$site->url}}', '_blank')">
@@ -125,15 +125,18 @@
             </div>
         </div>
         <script charset="utf-8" src="{{asset('js/layui.js')}}"></script>
+        
         <script>
-            layui.use(['element'], function(){
+            layui.use(['flow', 'element'], function(){
               var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
-              
               //监听导航点击
               element.on('nav(demo)', function(elem){
                 console.log(elem.text())
                 //layer.msg(elem.text());
               });
+
+              var flow = layui.flow;
+              flow.lazyimg({scrollElem:'.layui-body'});
             });
         </script>
         <script>
