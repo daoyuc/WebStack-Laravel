@@ -2,9 +2,10 @@
 
 namespace App\Admin\Controllers;
 
-use App\Site;
+use App\Admin\Extensions\Tools\BatchRestore;
 use App\Category;
 use App\Http\Controllers\Controller;
+use App\Site;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -86,6 +87,19 @@ class SiteController extends Controller
         $grid->describe('描述')->limit(40);
         $grid->url('地址');
 
+        $isTrash = request('_scope_') === 'trashed';
+
+        if ($isTrash) {
+            $grid->tools(function ($tools) {
+
+                $tools->batch(function (Grid\Tools\BatchActions $batch) {
+                    $batch->disableDelete();
+                    $batch->add('还原', new BatchRestore());
+                });
+
+            });
+        }
+
         $grid->filter(function ($filter) {
             $filter->disableIdFilter();
 
@@ -93,6 +107,8 @@ class SiteController extends Controller
             $filter->equal('category_id', '分类')->select($categories);
 
             $filter->like('title', '标题');
+
+            $filter->scope('trashed', '回收站')->onlyTrashed();
         });
 
         $grid->disableExport();
@@ -155,5 +171,11 @@ class SiteController extends Controller
         });
 
         return $form;
+    }
+
+    protected function restore()
+    {
+        //todo:定义其它需要恢复的关联模型数据
+        return Site::onlyTrashed()->find(request('ids'))->each->restore();
     }
 }
