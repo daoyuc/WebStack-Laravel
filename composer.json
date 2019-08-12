@@ -7,7 +7,7 @@
     "require": {
         "php": ">=7.0.0",
         "caouecs/laravel-lang": "~3.0",
-        "encore/laravel-admin": "^1.6",
+        "encore/laravel-admin": "^1.7",
         "fideloper/proxy": "~3.3",
         "intervention/image": "^2.4",
         "james.xue/login-captcha": "^1.1",
