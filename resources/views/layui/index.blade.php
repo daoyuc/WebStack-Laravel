@@ -93,7 +93,7 @@
                                 {{$site->title}}
                             </td>
                             <td>
-                                <img alt="{{$site->title}}" lay-src="/uploads/{{$site->thumb}}" width="40" />
+                                <img alt="{{$site->title}}" lay-src="{{Storage::url($site->thumb)}}" width="40" />
                             </td>
                             <td>
                                 <a href="javascript:void(0);" onclick="window.open('{{$site->url}}', '_blank')">

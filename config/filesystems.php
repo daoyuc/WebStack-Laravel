@@ -69,6 +69,21 @@ return [
             'visibility' => 'public',
             'url' => env('APP_URL').'/uploads',
         ],
+        
+        'oss' => [
+            'driver'        => 'oss',
+            'access_id'     => env('OSS_ACCESS_ID', ''),
+            'access_key'    => env('OSS_ACCESS_KEY', ''),
+            'bucket'        => env('OSS_BUCKET', ''),
+            'endpoint'      => env('OSS_ENDPOINT', ''), // OSS 外网节点或自定义外部域名
+            //'endpoint_internal' => '<internal endpoint [OSS内网节点] 如：oss-cn-shenzhen-internal.aliyuncs.com>', // v2.0.4 新增配置属性，如果为空，则默认使用 endpoint 配置(由于内网上传有点小问题未解决，请大家暂时不要使用内网节点上传，正在与阿里技术沟通中)
+            //<the endpoint of OSS, E.g: oss-cn-hangzhou.aliyuncs.com | custom domain, E.g:img.abc.com>
+            'cdnDomain'     => env('OSS_CDN_DOMAIN', ''), // 如果isCName为true, getUrl会判断cdnDomain是否设定来决定返回的url，如果cdnDomain未设置，则使用endpoint来生成url，否则使用cdn
+            'ssl'           => env('ADMIN_HTTPS', false), // true to use 'https://' and false to use 'http://'. default is false,
+            'isCName'       => env('OSS_CNAME', false), // 是否使用自定义域名,true: 则Storage.url()会使用自定义的cdn或域名生成文件url， false: 则使用外部节点生成url
+            'debug'         => env('APP_DEBUG', false),
+            'pathPrefix'    => env('OSS_PATH_PREFIX', 'public'), // 文件所在目录，未设置默认为根目录
+        ],
     ],
 
 ];
