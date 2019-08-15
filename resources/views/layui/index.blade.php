@@ -61,7 +61,7 @@
                         {{$category->title}}
                     </legend>
                 </fieldset>
-                <table class="layui-table" lay-size="lg">
+                <table class="layui-table" lay-size="sm">
                     <colgroup>
                         <col width="150">
                             <col width="200">
@@ -93,7 +93,11 @@
                                 {{$site->title}}
                             </td>
                             <td>
-                                <img alt="{{$site->title}}" lay-src="{{Storage::url($site->thumb)}}" width="40" />
+                                @if ($site->thumb)
+                                <img alt="{{$site->title}}" lay-src="{{Storage::url($site->thumb)}}" width="40" height="40" />
+                                @else
+                                <img alt="{{$site->title}}" src="{{config('common.default_img')}}" width="40" />
+                                @endif
                             </td>
                             <td>
                                 <a href="javascript:void(0);" onclick="window.open('{{$site->url}}', '_blank')">
@@ -139,6 +143,7 @@
               flow.lazyimg({scrollElem:'.layui-body'});
             });
         </script>
+        @if (config('app.env') == 'production')
         <script>
             var _hmt = _hmt || [];
 (function() {
@@ -148,5 +153,6 @@
   s.parentNode.insertBefore(hm, s);
 })();
         </script>
+        @endif
     </body>
 </html>
