@@ -34,14 +34,17 @@ class SiteController extends AdminController
 
         $grid->quickCreate(function (Grid\Tools\QuickCreate $create) {
             $create->select('category_id', '分类')
-            ->options(Category::selectOptions())
-            ->rules('required');
+                ->options(Category::selectOptions())
+                ->rules('required');
             $create->text('title', '标题')
-            ->attribute('autocomplete', 'off')
-            ->rules('required|max:50');
+                ->attribute('autocomplete', 'off')
+                ->rules('required|max:50');
             $create->text('url', '地址')
-            ->attribute('autocomplete', 'off')
-            ->rules('required|max:250');
+                ->attribute('autocomplete', 'off')
+                ->rules('required|max:250');
+            $create->text('describe', '描述')
+                ->attribute('autocomplete', 'off')
+                ->rules('max:100');
         });
 
         $grid->model()->orderBy('id', 'desc');
@@ -89,6 +92,7 @@ class SiteController extends AdminController
      * Make a show builder.
      *
      * @param mixed $id
+     *
      * @return Show
      */
     protected function detail($id)
@@ -115,30 +119,52 @@ class SiteController extends AdminController
     protected function form()
     {
         $form = new Form(new Site);
+        $form->setWidth(10, 2);
+        $form->fieldset(
+            '基本信息',
+            function (Form $form) {
+                $form->select('category_id', '分类')
+                    ->options(Category::selectOptions())
+                    ->rules('required');
+                $form->text('title', '标题')
+                    ->attribute('autocomplete', 'off')
+                    ->rules('required|max:50');
+                $form->image('thumb', '图标')
+                    ->crop(120, 120)
+                    ->uniqueName();
+                    //->rules('required');
+                $form->text('describe', '描述')
+                    ->attribute('autocomplete', 'off')
+                    ->rules('max:300');
+                $form->url('url', '地址')
+                    ->attribute('autocomplete', 'off')
+                    ->help('请输入 http:// 或 https:// 开头的网址')
+                    ->rules('required|max:250');
+            }
+        );
+        $form->fieldset(
+            '扩展信息',
+            function (Form $form) {
+                $form->text('info.stack', '技术栈');
+                $form->switch('info.ad', '是否有广告')
+                    ->states(config('common.switch_yn'))
+                    ->default('N');
+                $form->radio('info.freq', '更新周期')
+                    ->options(config('common.time_particles'))
+                    ->stacked()
+                    ->default('unknown');
+                $form->text('info.source', '来源');
+            }
+        );
+        
 
-        $form->select('category_id', '分类')
-            ->options(Category::selectOptions())
-            ->rules('required');
-        $form->text('title', '标题')
-            ->attribute('autocomplete', 'off')
-            ->rules('required|max:50');
-        $form->image('thumb', '图标')
-            ->crop(120, 120)
-            ->uniqueName();
-        //->rules('required');
-        $form->text('describe', '描述')
-            ->attribute('autocomplete', 'off')
-            ->rules('max:300');
-        $form->url('url', '地址')
-            ->attribute('autocomplete', 'off')
-            ->help('请输入 http:// 或 https:// 开头的网址')
-            ->rules('required|max:250');
-
-        $form->footer(function ($footer) {
-            $footer->disableViewCheck();
-            $footer->disableEditingCheck();
-            $footer->disableCreatingCheck();
-        });
+        $form->footer(
+            function ($footer) {
+                $footer->disableViewCheck();
+                $footer->disableEditingCheck();
+                $footer->disableCreatingCheck();
+            }
+        );
 
         return $form;
     }

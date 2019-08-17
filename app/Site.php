@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Site extends Model
 {
-	use SoftDeletes;
-	/**
+    use SoftDeletes;
+    /**
      * 需要被转换成日期的属性。
      *
      * @var array
@@ -18,5 +18,10 @@ class Site extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function info()
+    {
+        return $this->hasOne(SiteInfo::class);
     }
 }
