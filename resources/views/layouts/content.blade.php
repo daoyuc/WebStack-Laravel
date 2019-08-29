@@ -9,12 +9,13 @@
                 echo '<div class="row">';
 
                 foreach($sites as $site){
+                    $src = $site->thumb ? Storage::url($site->thumb) : config('common.default_img');
                     echo <<<EOF
                     <div class="col-sm-3">
                         <div class="xe-widget xe-conversations box2 label-info" onclick="window.open('$site->url', '_blank')" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="$site->url">
                             <div class="xe-comment-entry">
                                 <a class="xe-user-img">
-                                    <img src="{{Storage::url($site->thumb)}}" class="img-circle" width="40">
+                                    <img src="$src" class="img-circle" width="40">
                                 </a>
                                 <div class="xe-comment">
                                     <a href="#" class="xe-user-name overflowClip_1">
