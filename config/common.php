@@ -4,6 +4,7 @@
  */
 return [
     'theme' => env('THEME', 'default'),
+    'github'   => env('GITHUB', 'https://github.com/hui-ho/WebStack-Laravel'),
     'default_img' => '/img/default.png',
     'switch_yn'               => [
         'on'  => ['value' => 'Y', 'text' => '✔', 'color' => 'primary'],
