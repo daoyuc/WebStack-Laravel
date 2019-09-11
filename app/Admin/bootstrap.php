@@ -18,4 +18,8 @@
  *
  */
 
-Encore\Admin\Form::forget(['map', 'editor']);
+use Encore\Admin\Form;
+use App\Admin\Extensions\Form\TreeCheck;
+
+Form::forget(['map', 'editor']);
+Form::extend('treecheck', TreeCheck::class);
