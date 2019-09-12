@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Encore\Admin\Widgets\Table;
 
 class MyRoleController extends AdminController
 {
@@ -26,16 +27,33 @@ class MyRoleController extends AdminController
      */
     protected function grid()
     {
-        $roleModel = config('admin.database.roles_model');
+        //$roleModel = config('admin.database.roles_model');
+        $roleClass = \App\Models\Role::class;
+        $roleModel = new $roleClass();
 
-        $grid = new Grid(new $roleModel());
+        $grid = new Grid($roleModel);
 
         $grid->column('id', 'ID')->sortable();
         $grid->column('slug', trans('admin.slug'));
         $grid->column('name', trans('admin.name'));
+        /*$grid->column('name', trans('admin.name'))->modal('授权菜单', function ($model) {
+            $menus = $model->menus()->take(5)->get()
+                ->map(function ($menu) {
+                    return $menu->only(['id','title','created_at']);
+                });
+            //dd($menus);
+            return new Table(['id','菜单','创建时间'], $menus->toArray());
+        });*/
 
         $grid->column('permissions', trans('admin.permission'))->pluck('name')->label();
-        $grid->column('menus', trans('admin.menu'))->pluck('title')->label();
+        //$grid->column('menus', trans('admin.menu'))->pluck('title')->label();
+        $grid->column('menu_progress', '菜单授权')->progressBar($style = 'primary', $size = 'sm', $max = 100)->modal('授权菜单', function ($model) {
+            $menus = $model->menus()->take(5)->get()
+                ->map(function ($menu) {
+                    return $menu->only(['id','title','created_at']);
+                });
+            return new Table(['id','菜单','创建时间'], $menus->toArray());
+        });
 
         $grid->column('created_at', trans('admin.created_at'));
         $grid->column('updated_at', trans('admin.updated_at'));
